@@ -67,6 +67,8 @@ import './index.css';
       this.setState({
         history: history.concat([{
           squares: squares,
+          col: (i % 3) +1,            // i を横番号に変換
+          row: Math.floor(i / 3) +1,  // i を立て番号に変換
         }]),
         stepNumber: history.length,
         xIsNext: !this.state.xIsNext,
@@ -87,7 +89,7 @@ import './index.css';
 
       const moves = history.map((step, move) => {
         const desc = move ?
-          'Go to move #' + move :
+          'Go to move #' + move + '(col: ' + step.col + ' row: ' + step.row + ')':
           'Go to game start';
         
         return (
