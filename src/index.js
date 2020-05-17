@@ -5,7 +5,7 @@ import './index.css';
   // 関数コンポーネント
   function Square(props) {
     return (
-      <button className="square" onClick={props.onClick}>
+      <button className={`square ${props.isHighLight ? 'highlight' : ''}`} onClick={props.onClick}>
         {props.value}
       </button>
     )
@@ -13,10 +13,11 @@ import './index.css';
 
   class Board extends React.Component {
 
-    renderSquare(i) {
+    renderSquare(i, isHighLight = false) {
       return <Square 
         value={this.props.squares[i]}
         onClick={() => this.props.onClick(i) } key={i}
+        isHighLight={isHighLight}
       />;
     }
   
@@ -24,38 +25,17 @@ import './index.css';
 
       return (
         <div>
-
-          { 
-            Array(3).fill(0).map((row, i) => {
-              return (
-                <div className="board-row" key={i}>
-                  { 
-                    Array(3).fill(0).map((col, j) => {
-                      return(
-                        this.renderSquare(i*3+j)
-                      )
-                    })
-                  }
-                </div>
-              )
-            })
-          }
-
-          {/* <div className="board-row">
-            {this.renderSquare(0)}
-            {this.renderSquare(1)}
-            {this.renderSquare(2)}
-          </div>
-          <div className="board-row">
-            {this.renderSquare(3)}
-            {this.renderSquare(4)}
-            {this.renderSquare(5)}
-          </div>
-          <div className="board-row">
-            {this.renderSquare(6)}
-            {this.renderSquare(7)}
-            {this.renderSquare(8)}
-          </div> */}
+          {Array(3).fill(0).map((row, i) => {
+            return (
+              <div className="board-row" key={i}>
+                {Array(3).fill(0).map((col, j) => {
+                  return(
+                    this.renderSquare(i*3+j, this.props.highLightCells.indexOf(i*3+j) !== -1)
+                  )
+                })}
+              </div>
+            )
+          })}
         </div>
       );
     }
@@ -109,7 +89,7 @@ import './index.css';
     render() {
       const history = this.state.history;
       const current = history[this.state.stepNumber];
-      const winner = calculateWinner(current.squares);
+      const winnerSet = calculateWinner(current.squares);
 
       const moves = history.map((step, move) => {
         const desc = move ?
@@ -118,14 +98,14 @@ import './index.css';
         
         return (
           <li key={move}>
-            <button onClick={() => this.jumpTo(move)} class={this.state.stepNumber === move ? 'bold' : ''}>{desc}</button> 
+            <button onClick={() => this.jumpTo(move)} className={this.state.stepNumber === move ? 'bold' : ''}>{desc}</button> 
           </li>
         );
       });
 
       let status;
-      if(winner) {
-        status = 'Winner: ' + winner;
+      if(winnerSet) {
+        status = 'Winner: ' + winnerSet.winner;
       } else {
         status = 'Next player: ' + (this.state.xIsNext ? 'x' : 'o');
       }
@@ -136,6 +116,7 @@ import './index.css';
             <Board 
               squares={current.squares}
               onClick={(i) => this.handleClick(i)}
+              highLightCells={winnerSet ? winnerSet.line : []}
             />
           </div>
           <div className="game-info">
@@ -169,7 +150,10 @@ import './index.css';
     for (let i = 0; i < lines.length; i++) {
       const [a, b, c] = lines[i];
       if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-        return squares[a];
+        return {
+          winner: squares[a],
+          line: [a, b, c],
+        };
       }
     }
     return null;

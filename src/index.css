@@ -1,4 +1,4 @@
-body {
+  body {
     font: 14px "Century Gothic", Futura, sans-serif;
     margin: 20px;
   }
@@ -16,7 +16,7 @@ body {
   .bold {
     font-weight: bold;
   }
-  
+
   .status {
     margin-bottom: 10px;
   }
@@ -53,3 +53,6 @@ body {
     margin-left: 20px;
   }
   
+  .highlight {
+    background-color: yellow;
+  }
