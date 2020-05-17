@@ -70,7 +70,14 @@ import './index.css';
         }],
         stepNumber: 0,
         xIsNext: true,
+        isAsc: true,
       };
+    }
+
+    reverseSteps() {
+      this.setState({
+        isAsc: !this.state.isAsc,
+      });
     }
 
     handleClick(i) {
@@ -133,7 +140,8 @@ import './index.css';
           </div>
           <div className="game-info">
             <div>{status}</div>
-            <ol>{moves}</ol>
+            <div><button onClick={() => this.reverseSteps()}>ASC⇔DESC</button></div>
+            <ol>{this.state.isAsc ? moves : moves.reverse()}</ol>
           </div>
         </div>
       );
