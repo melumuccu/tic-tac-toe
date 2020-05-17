@@ -12,6 +12,10 @@ body {
     content: "";
     display: table;
   }
+
+  .bold {
+    font-weight: bold;
+  }
   
   .status {
     margin-bottom: 10px;
