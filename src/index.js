@@ -106,6 +106,8 @@ import './index.css';
       let status;
       if(winnerSet) {
         status = 'Winner: ' + winnerSet.winner;
+      } else if(this.state.stepNumber === 9) {
+        status = 'Even!';
       } else {
         status = 'Next player: ' + (this.state.xIsNext ? 'x' : 'o');
       }
