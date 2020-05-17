@@ -16,7 +16,7 @@ import './index.css';
     renderSquare(i) {
       return <Square 
         value={this.props.squares[i]}
-        onClick={() => this.props.onClick(i)}
+        onClick={() => this.props.onClick(i) } key={i}
       />;
     }
   
@@ -24,7 +24,24 @@ import './index.css';
 
       return (
         <div>
-          <div className="board-row">
+
+          { 
+            Array(3).fill(0).map((row, i) => {
+              return (
+                <div className="board-row" key={i}>
+                  { 
+                    Array(3).fill(0).map((col, j) => {
+                      return(
+                        this.renderSquare(i*3+j)
+                      )
+                    })
+                  }
+                </div>
+              )
+            })
+          }
+
+          {/* <div className="board-row">
             {this.renderSquare(0)}
             {this.renderSquare(1)}
             {this.renderSquare(2)}
@@ -38,7 +55,7 @@ import './index.css';
             {this.renderSquare(6)}
             {this.renderSquare(7)}
             {this.renderSquare(8)}
-          </div>
+          </div> */}
         </div>
       );
     }
@@ -67,8 +84,8 @@ import './index.css';
       this.setState({
         history: history.concat([{
           squares: squares,
-          col: (i % 3) +1,            // i を横番号に変換
-          row: Math.floor(i / 3) +1,  // i を立て番号に変換
+          col: (i % 3) +1, 
+          row: Math.floor(i / 3) +1,
         }]),
         stepNumber: history.length,
         xIsNext: !this.state.xIsNext,
